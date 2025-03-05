@@ -1,3 +1,6 @@
 fun main() {
-    println("To-Do List Application")
+    println("Hello World!\n")
+    println("************************")
+    println(" To-Do List Application ")
+    println("************************")
 }
