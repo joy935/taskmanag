@@ -18,7 +18,9 @@ fun main() {
         println("3. Modify a task")
         println("4. Complete a task")
         println("5. Delete a task")
-        println("6. Exit")
+        println("6. Modify a task category")
+        println("7. List by category")
+        println("8. Exit")
         print("Enter your choice: ")
 
         // use toIntOrNull to only accept integer and
@@ -37,9 +39,10 @@ fun main() {
                     // ensures input is not null
                     title = readLine()?: ""
                 } while (title.isBlank()) // ensures input is not blank
-
+                // associate a category to a task
+                val category = taskManager.chooseCategory()
                 // add task if input is a valid title
-                taskManager.addTask(title)
+                taskManager.addTask(title, category)
             }
             // if the user chooses to list the tasks
             2 -> {
@@ -124,8 +127,32 @@ fun main() {
                     println("Invalid input.")
                 }
             }
-            // if the user chooses to exit the app
+            // if the user chooses to modify the category
             6 -> {
+                if (taskManager.isEmpty()) {
+                    println("No tasks available to modify its category.")
+                    continue // go back to the menu
+                }
+                taskManager.listTasks()
+
+                print("\nEnter task index to modify its category: ")
+                val index = readLine()?.toIntOrNull()
+                if (index != null) {
+                    taskManager.modifyCategory(index.toInt())
+                }
+                else {
+                    println("Invalid input.")
+                }
+
+            }
+            7 -> {
+                if (taskManager.isEmpty()) {
+                    println("No tasks available to list by category.")
+                }
+                taskManager.listByCategory()
+            }
+            // if the user chooses to exit the app
+            8 -> {
                 // print a message and exit the app
                 println("Thank you for using the Task Manager App!")
                 println("Goodbye!")
