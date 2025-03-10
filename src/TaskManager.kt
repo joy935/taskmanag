@@ -10,14 +10,14 @@ class TaskManager {
     fun chooseCategory(): TaskCategory {
         println("Categories: ")
         // display all the categories
-        TaskCategory.values().forEachIndexed { index, category ->
+        TaskCategory.entries.forEachIndexed { index, category ->
             println("${index + 1}. $category")
         }
         print("Choose your category: ")
         val category = readLine()?.toIntOrNull()
         // if the category is valid, associate the task with the category
-        return if (category != null && category in 1..TaskCategory.values().size) {
-            TaskCategory.values()[category - 1]
+        return if (category != null && category in 1..TaskCategory.entries.size) {
+            TaskCategory.entries[category - 1]
         }
         // otherwise, default to OTHER
         else {
@@ -55,7 +55,7 @@ class TaskManager {
         val groupedTasks = tasks.groupBy { it.category }
 
         // iterate over the categories
-        TaskCategory.values().forEach { category ->
+        TaskCategory.entries.forEach { category ->
             val categoryTask = groupedTasks[category]?: emptyList()
 
             println("\n$category (${categoryTask.size} tasks)")
