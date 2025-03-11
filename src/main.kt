@@ -18,8 +18,8 @@ fun main() {
         println("3. Modify a task")
         println("4. Complete a task")
         println("5. Delete a task")
-        println("6. Modify a task category")
-        println("7. List by category")
+        println("6. List by category")
+        println("7. List by due date")
         println("8. Exit")
         print("Enter your choice: ")
 
@@ -41,8 +41,14 @@ fun main() {
                 } while (title.isBlank()) // ensures input is not blank
                 // associate a category to a task
                 val category = taskManager.chooseCategory()
+                val task = Task(title, category, null, false)
+                print("Would you like to set a due date? (y/n): ")
+                val askDueDate = readLine()?.trim()?.lowercase()
+                if (askDueDate == "y") {
+                    taskManager.dueDate(task)
+                }
                 // add task if input is a valid title
-                taskManager.addTask(title, category)
+                taskManager.addTask(task)
             }
             // if the user chooses to list the tasks
             2 -> {
@@ -127,29 +133,21 @@ fun main() {
                     println("Invalid input.")
                 }
             }
-            // if the user chooses to modify the category
+            // if the user chooses to list by category
             6 -> {
                 if (taskManager.isEmpty()) {
-                    println("No tasks available to modify its category.")
+                    println("No tasks.")
                     continue // go back to the menu
                 }
-                taskManager.listTasks()
-
-                print("\nEnter task index to modify its category: ")
-                val index = readLine()?.toIntOrNull()
-                if (index != null) {
-                    taskManager.modifyCategory(index.toInt())
-                }
-                else {
-                    println("Invalid input.")
-                }
-
+                taskManager.listByCategory()
             }
+            // if the user chooses to list by due dates
             7 -> {
                 if (taskManager.isEmpty()) {
-                    println("No tasks available to list by category.")
+                    println("No tasks.")
+                    continue // go back to the menu
                 }
-                taskManager.listByCategory()
+                taskManager.listByDueDate()
             }
             // if the user chooses to exit the app
             8 -> {

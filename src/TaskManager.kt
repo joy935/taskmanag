@@ -1,10 +1,24 @@
 import src.TaskCategory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 // TaskManager class to manage tasks:
 // add, display, modify, complete and delete tasks
 class TaskManager {
     // mutable list to store tasks
     var tasks = mutableListOf<Task>()
+
+    // function to add a new task composed by a title,
+    // a category and a default not completed status
+    fun addTask(task: Task) {
+        tasks.add(task)
+        // display the task newly added
+        if (task.dueDate == null ) {
+            println("\nAdded task: ${task.title} ~ Category: ${task.category}")
+        } else {
+            println("\nAdded task: ${task.title} ~ Category: ${task.category} ~ Due Date: ${task.dueDate}")
+        }
+    }
 
     // function to choose a category to classify tasks
     fun chooseCategory(): TaskCategory {
@@ -26,58 +40,29 @@ class TaskManager {
         }
     }
 
-    // function to modify the category
-    fun modifyCategory(index: Int) {
-        // adjust the user index (1 based)
-        // to match the list index (0 based)
-        val indexAdjusted = index - 1
-        // prompt the user for a new category
-        // if the index is valid
-        if (indexAdjusted in tasks.indices) {
-            val task = tasks[indexAdjusted]
-            val newCategory = chooseCategory()
-            // update the category
-            task.category = newCategory
-            println("'${task.title}' is now in category: $newCategory")
-        }
-        // otherwise, print an invalid message
-        else {
-            println("Invalid index: $index")
-        }
-    }
-
-    // function to list by category
-    fun listByCategory() {
-        println("*****************")
-        println("Tasks by Category")
-
-        // group tasks by category
-        val groupedTasks = tasks.groupBy { it.category }
-
-        // iterate over the categories
-        TaskCategory.entries.forEach { category ->
-            val categoryTask = groupedTasks[category]?: emptyList()
-
-            println("\n$category (${categoryTask.size} tasks)")
-
-            if (categoryTask.isEmpty()) {
-                println("No tasks.")
-            } else {
-                categoryTask.forEachIndexed { index, task ->
-                    val status = if (task.completed) "[✓]" else "[ ]"
-                    println("  ${index + 1}. $status ${task.title}")
+    // function to set a due date for a task
+    fun dueDate(task: Task) {
+        // iterate until the user enters a valid date
+        while (true) {
+            print("Enter the due date (YYYY-MM-DD): ")
+            val input = readLine()?:""
+            //  try to parse the date input
+            try {
+                val parsedDate = LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                // if the date is in the past, print a message
+                if (parsedDate.isBefore(LocalDate.now())) {
+                    println("The due date must be today or in the future.")
                 }
+                // otherwise, set the due date
+                else {
+                    task.dueDate = parsedDate
+                    println("Due date set to: ${task.dueDate}")
+                    break // return to menu
+                }
+            } catch (e: Exception) {
+                println("Invalid format.")
             }
         }
-    }
-
-
-    // function to add a new task composed by a title,
-    // a category and a default not completed status
-    fun addTask(title: String, category: TaskCategory) {
-        tasks.add(Task(title, category, false))
-        // display the task newly added
-        println("\nAdded task: $title ~ Category: $category")
     }
 
     // function to display all the tasks or
@@ -104,7 +89,11 @@ class TaskManager {
                     status = "[ ]"
                 }
                 // list all tasks with their adjusted index
-                println("${index + 1}. $status ${task.title} ~ ${task.category}") }
+                if (task.dueDate == null) {
+                    println("${index + 1}. $status ${task.title} ~ ${task.category}")
+                } else {
+                    println("${index + 1}. $status ${task.title} ~ ${task.category} ~ Due Date: ${task.dueDate}") }
+                }
         }
     }
 
@@ -116,17 +105,49 @@ class TaskManager {
         // prompt the user for a new title
         // if the index is valid
         if (indexAdjusted in tasks.indices) {
-            // prompt the user to enter a new title
-            print("Enter a new title: ")
-            val newTitle = readLine()?.trim()
-            // modify the task if the input is valid
-            if (!newTitle.isNullOrBlank()) {
-                tasks[indexAdjusted].title = newTitle
-                println("Task updated: $newTitle")
-            }
-            // otherwise, print an invalid message
-            else {
-                println("Task title can't be null or empty.")
+
+            val task = tasks[indexAdjusted]
+
+            while (true) {
+                println("Modify task: ${task.title}")
+                println("1. Modify title")
+                println("2. Modify category")
+                println("3. Modify due date")
+                println("4. Cancel")
+                print("Enter your choice: ")
+
+                val choice = readLine()?.toIntOrNull()
+                when (choice) {
+                    1 -> {
+                        // prompt the user to enter a new title
+                        print("Enter a new title: ")
+                        val newTitle = readLine()?.trim()
+                        // modify the task if the input is valid
+                        if (!newTitle.isNullOrBlank()) {
+                            tasks[indexAdjusted].title = newTitle
+                            println("Task updated: $newTitle")
+                        }
+                        // otherwise, print an invalid message
+                        else {
+                            println("Task title can't be null or empty.")
+                        }
+                    }
+
+                    2 -> {
+                        val newCategory = chooseCategory()
+                        task.category = newCategory
+                        println("Category updated: $newCategory")
+                    }
+
+                    3 -> {
+                        dueDate(task)
+                    }
+
+                    4 -> {
+                        println("Modification cancelled.")
+                        break
+                    }
+                }
             }
         }
         // otherwise, print an invalid message
@@ -167,6 +188,64 @@ class TaskManager {
         }
     }
 
+    // function to list by category
+    fun listByCategory() {
+        println("*****************")
+        println("Tasks by Category")
+
+        // group tasks by category
+        val groupedTasks = tasks.groupBy { it.category }
+
+        // iterate over the categories
+        TaskCategory.entries.forEach { category ->
+            val categoryTask = groupedTasks[category]?: emptyList()
+
+            println("\n$category (${categoryTask.size} tasks)")
+
+            if (categoryTask.isEmpty()) {
+                println("No tasks.")
+            } else {
+                categoryTask.forEachIndexed { index, task ->
+                    val status = if (task.completed) "[✓]" else "[ ]"
+                    if (task.dueDate == null) {
+                        println("${index + 1}. $status ${task.title}")
+                    }
+                    else {
+                        println("  ${index + 1}. $status ${task.title} ~ Due Date: ${task.dueDate}")
+                    }
+                }
+            }
+        }
+    }
+
+    // function to list all tasks by due date (chronologically)
+    fun listByDueDate() {
+        println("\n***********************")
+        println("Tasks Sorted by Due Date")
+
+        // Sort tasks by due date (null values go last)
+        val tasksWithDueDate = tasks.filter { it.dueDate != null }.sortedBy { it.dueDate }
+        val tasksWithoutDueDate = tasks.filter { it.dueDate == null }
+
+        if (tasksWithDueDate.isNotEmpty()) {
+            tasksWithDueDate.forEachIndexed { index, task ->
+                val status = if (task.completed) "[✓]" else "[ ]"
+                val dueDateText = task.dueDate?.toString() ?: "No Due Date"
+                println("${index + 1}. $status ${task.title} ~ ${task.category} ~ Due: $dueDateText")
+            }
+        }
+
+        println("\n***********************")
+        println("Other tasks")
+
+        if (tasksWithoutDueDate.isNotEmpty()) {
+            tasksWithoutDueDate.forEachIndexed() { index, task ->
+                val status = if (task.completed) "[✓]" else "[ ]"
+                println("${index + 1}. $status ${task.title} ~ ${task.category}")
+            }
+        }
+
+    }
     // function to return true
     // if the task list is empty
     fun isEmpty(): Boolean {
