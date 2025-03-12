@@ -1,12 +1,13 @@
-import src.TaskCategory
+package src
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-// TaskManager class to manage tasks:
+// src.Task Manager class to manage tasks:
 // add, display, modify, complete and delete tasks
 class TaskManager {
     // mutable list to store tasks
-    var tasks = mutableListOf<Task>()
+    private var tasks = mutableListOf<Task>()
 
     // function to add a new task composed by a title,
     // a category and a default not completed status
@@ -28,7 +29,7 @@ class TaskManager {
             println("${index + 1}. $category")
         }
         print("Choose your category: ")
-        val category = readLine()?.toIntOrNull()
+        val category = readlnOrNull()?.toIntOrNull()
         // if the category is valid, associate the task with the category
         return if (category != null && category in 1..TaskCategory.entries.size) {
             TaskCategory.entries[category - 1]
@@ -45,7 +46,7 @@ class TaskManager {
         // iterate until the user enters a valid date
         while (true) {
             print("Enter the due date (YYYY-MM-DD): ")
-            val input = readLine()?:""
+            val input = readlnOrNull() ?:""
             //  try to parse the date input
             try {
                 val parsedDate = LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -78,15 +79,14 @@ class TaskManager {
             println("Tasks: ")
             // iterate through the list of task
             tasks.forEachIndexed { index, task ->
-                // use non-mutable variable to store the status
-                val status: String
                 // mark if the task is completed
-                if (task.completed) {
-                    status = "[✓]"
+                // use non-mutable variable to store the status
+                val status: String = if (task.completed) {
+                    "[✓]"
                 }
                 // otherwise, uncheck it
                 else {
-                    status = "[ ]"
+                    "[ ]"
                 }
                 // list all tasks with their adjusted index
                 if (task.dueDate == null) {
@@ -116,20 +116,20 @@ class TaskManager {
                 println("4. Cancel")
                 print("Enter your choice: ")
 
-                val choice = readLine()?.toIntOrNull()
+                val choice = readlnOrNull()?.toIntOrNull()
                 when (choice) {
                     1 -> {
                         // prompt the user to enter a new title
                         print("Enter a new title: ")
-                        val newTitle = readLine()?.trim()
+                        val newTitle = readlnOrNull()?.trim()
                         // modify the task if the input is valid
                         if (!newTitle.isNullOrBlank()) {
                             tasks[indexAdjusted].title = newTitle
-                            println("Task updated: $newTitle")
+                            println("src.Task updated: $newTitle")
                         }
                         // otherwise, print an invalid message
                         else {
-                            println("Task title can't be null or empty.")
+                            println("src.Task title can't be null or empty.")
                         }
                     }
 
@@ -239,7 +239,7 @@ class TaskManager {
         println("Other tasks")
 
         if (tasksWithoutDueDate.isNotEmpty()) {
-            tasksWithoutDueDate.forEachIndexed() { index, task ->
+            tasksWithoutDueDate.forEachIndexed { index, task ->
                 val status = if (task.completed) "[✓]" else "[ ]"
                 println("${index + 1}. $status ${task.title} ~ ${task.category}")
             }

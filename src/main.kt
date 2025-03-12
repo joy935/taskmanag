@@ -1,9 +1,11 @@
+package src
+
 fun main() {
     // println("Hello World!\n")
 
     // display the title of the application
     println("**************************")
-    println(" Task Manager Application ")
+    println(" src.Task Manager Application ")
     println("**************************")
 
     // create a new instance of task manager
@@ -25,7 +27,7 @@ fun main() {
 
         // use toIntOrNull to only accept integer and
         // transforms any other input into null
-        val choice = readLine()?.toIntOrNull()
+        val choice = readlnOrNull()?.toIntOrNull()
         // use when to direct the options chosen
         when (choice) {
             // if the user chooses to add a task
@@ -37,13 +39,13 @@ fun main() {
                     // prompt the user to enter the task title
                     print("Enter task title: ")
                     // ensures input is not null
-                    title = readLine()?: ""
+                    title = readlnOrNull() ?: ""
                 } while (title.isBlank()) // ensures input is not blank
                 // associate a category to a task
                 val category = taskManager.chooseCategory()
                 val task = Task(title, category, null, false)
                 print("Would you like to set a due date? (y/n): ")
-                val askDueDate = readLine()?.trim()?.lowercase()
+                val askDueDate = readlnOrNull()?.trim()?.lowercase()
                 if (askDueDate == "y") {
                     taskManager.dueDate(task)
                 }
@@ -71,7 +73,7 @@ fun main() {
                 print("\nEnter task index to modify: ")
                 // convert valid input to an integer and
                 // return null if input is invalid
-                val index = readLine()?.toIntOrNull()
+                val index = readlnOrNull()?.toIntOrNull()
                 // modify task if input is a valid number
                 if (index != null) {
                     taskManager.modifyTask(index.toInt())
@@ -97,7 +99,7 @@ fun main() {
                 print("\nEnter task index to complete: ")
                 // convert valid input to an integer and
                 // return null if input is invalid
-                val index = readLine() ?.toIntOrNull()
+                val index = readlnOrNull() ?.toIntOrNull()
                 // complete task if input is a valid number
                 if (index != null) {
                     taskManager.completeTask(index.toInt())
@@ -123,7 +125,7 @@ fun main() {
                 print("\nEnter task index to delete: ")
                 // convert valid input to an integer and
                 // return null if input is invalid
-                val index = readLine()?.toIntOrNull()
+                val index = readlnOrNull()?.toIntOrNull()
                 // delete task if input is a valid number
                 if (index != null) {
                     taskManager.deleteTask(index.toInt())
@@ -152,7 +154,7 @@ fun main() {
             // if the user chooses to exit the app
             8 -> {
                 // print a message and exit the app
-                println("Thank you for using the Task Manager App!")
+                println("Thank you for using the src.Task Manager App!")
                 println("Goodbye!")
                 return // exit
             }
