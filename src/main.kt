@@ -1,11 +1,11 @@
 package src
 
 fun main() {
-    // println("Hello World!\n")
+
 
     // display the title of the application
     println("**************************")
-    println(" src.Task Manager Application ")
+    println(" Task Manager Application ")
     println("**************************")
 
     // create a new instance of task manager
