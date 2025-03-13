@@ -1,0 +1,44 @@
+[
+    {
+        "completed": true,
+        "title": "Get groceries",
+        "category": "PERSONAL"
+    },
+    {
+        "completed": false,
+        "title": "Clean living room",
+        "category": "FAMILY"
+    },
+    {
+        "dueDate": "2025-04-04",
+        "completed": false,
+        "title": "Finish to-do project",
+        "category": "WORK"
+    },
+    {
+        "dueDate": "2025-03-22",
+        "completed": false,
+        "title": "Meeting with Mark",
+        "category": "WORK"
+    },
+    {
+        "completed": false,
+        "title": "Organize folders",
+        "category": "WORK"
+    },
+    {
+        "completed": false,
+        "title": "Buy more yarn ",
+        "category": "HOBBY"
+    },
+    {
+        "completed": true,
+        "title": "Fix frame",
+        "category": "HOBBY"
+    },
+    {
+        "completed": false,
+        "title": "Buy new boots",
+        "category": "PERSONAL"
+    }
+]
