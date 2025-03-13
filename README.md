@@ -24,7 +24,7 @@ This application provides a foundation for building more advanced features in th
 - TaskStorage object: Handles loading and saving files
 - Main: Provides a simple menu for user interaction through the command-line
 
-[Software Demo Video](https://youtu.be/rEmIMBU80Fg)
+[Software Demo Video](https://youtu.be/rEmIMBU80Fg) 
 
 # Development Environment
 
