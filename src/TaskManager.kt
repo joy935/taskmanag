@@ -3,7 +3,7 @@ package src
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-// src.Task Manager class to manage tasks:
+// Task Manager class to manage tasks:
 // add, display, modify, complete and delete tasks
 class TaskManager {
     // mutable list to store tasks
